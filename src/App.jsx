@@ -5,7 +5,7 @@ import data from './data/data'
 import { ArticleProp } from './pages/ArticleProp'
 import {
   BrowserRouter,
-  Route,Link,Routes} from "react-router-dom";
+  Route,createHashRouter,RouterProvider,Routes} from "react-router-dom";
 
 
 function App() {
@@ -23,15 +23,21 @@ function App() {
     const filterData = data.filter(article=>article.category===category)
     setArticles(filterData)
   }
+  const router= createHashRouter([
+    {
+      path:"/",
+      element:[<Hero/>,<Buttons categories={categories} filterCategory={filterCategory}/>,<ArticleList articles={articles}/>]
+    },
+    {
+      path:"/article/:id",
+      element:<ArticleProp articles={articles} />
+    }
+  ])
   return (
     <>
-      <BrowserRouter>
-          <Routes>         
-            <Route path='/article/:id' element={<ArticleProp articles={articles} />} />
-            <Route path='/' element={ [<Hero/>,<Buttons categories={categories} filterCategory={filterCategory}/>,<ArticleList articles={articles}/>]} />
-          </Routes>
-
-      </BrowserRouter>
+     {
+      <RouterProvider router={router}/>
+     }
     </>
   )
 }
